@@ -1,4 +1,4 @@
-all: bin/boltzmann_solver bin/boltzmann_c_solver
+all: bin/boltzmann_solver bin/boltzmann_c_solver bin/boltzmann_openmp_solver
 
 NVCC            ?= $(CUDA_BIN_PATH)/nvcc
 GCC             ?= gcc
@@ -36,8 +36,12 @@ bin/boltzmann_solver: src/boltzmann_gpu.o src/boltzmann_cli.c src/boltzmann_cli.
 	$(GCC) $(CCFLAGS) -O3 -std=gnu99 -o $@ $+ $(LDFLAGS) $(EXTRA_LDFLAGS) -I$(CUDA_INC_PATH) -DBLTZM_KERNEL=$(BLTZM_KERNEL) && rm -f src/boltzmann_gpu.o
 
 bin/boltzmann_c_solver: src/boltzmann_c_solver.c src/boltzmann_cli.c src/boltzmann_cli.h src/boltzmann.h src/boltzmann_solver.h 
-	$(GCC) -std=gnu99 $+ -o $@ -lm -lgsl -lgslcblas
+	$(GCC) -std=gnu99 -O3 $+ -o $@ -lm -lgsl -lgslcblas
+
+bin/boltzmann_openmp_solver: src/boltzmann_c_solver.c src/boltzmann_cli.c src/boltzmann_cli.h src/boltzmann.h src/boltzmann_solver.h 
+	$(GCC) $+ -o $@ -lm -lgsl -lgslcblas -fopenmp -std=gnu99 -O3 
+
 
 clean: 
-	rm -f bin/boltzmann_c_solver bin/boltzmann_solver src/boltzmann_gpu.o && find . -type f -name '*~' -exec rm -f {} \;
+	rm -f bin/boltzmann_c_solver bin/boltzmann_solver src/boltzmann_gpu.o bin/boltzmann_openmp_solver && find . -type f -name '*~' -exec rm -f {} \;
 
