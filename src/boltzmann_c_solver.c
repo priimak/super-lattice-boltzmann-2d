@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <omp.h>
 
 #include "constants.h"
 #include "boltzmann.h"
@@ -378,7 +379,6 @@ void step_on_grid(ffloat *a0,           ffloat *a_current,   ffloat *b_current,
     } 
   }
   #pragma end parallel for
-
 } // end of step on grid(...)
 
 void step_on_half_grid(ffloat *a0, ffloat *a_current,    ffloat *b_current, 
@@ -408,7 +408,6 @@ void step_on_half_grid(ffloat *a0, ffloat *a_current,    ffloat *b_current,
     }
   }
   #pragma end parallel for
-
 } // end of step_on_half_grid(...)
 
 void av(ffloat *a, ffloat *b, ffloat *av_data, ffloat t) {

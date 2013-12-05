@@ -1,5 +1,5 @@
-super-lattice-boltzmann-2d
-==========================
+Superlattice 2D Boltzmann Solver
+================================
 
 Overview
 --------
